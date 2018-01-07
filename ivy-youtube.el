@@ -141,7 +141,7 @@
 (defun ivy-youtube-wrapper (*qqJson*)
   "Parse the json provided by *QQJSON* and provide search result targets."
   (let (*results* '())
-    (cl-loop for x being the elements of (ivy-youtube-tree-assoc 'items *qqJson*)
+    (cl-loop for x being the elements of (cdr  (ivy-youtube-tree-assoc 'items *qqJson*))
              do (push (cons (cdr (ivy-youtube-tree-assoc 'title x))
                             (cdr (ivy-youtube-tree-assoc 'videoId x))) *results*))
     (ivy-read "Youtube Search Results"
