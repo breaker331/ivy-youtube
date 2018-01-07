@@ -145,7 +145,7 @@
              do (push (cons (cdr (ivy-youtube-tree-assoc 'title x))
                             (cdr (ivy-youtube-tree-assoc 'videoId x))) *results*))
     (ivy-read "Youtube Search Results"
-              *results*
+              (reverse *results*)
               :action (lambda (cand)
                         (ivy-youtube-playvideo (ivy-youtube-build-url (cdr cand)))))))
 
