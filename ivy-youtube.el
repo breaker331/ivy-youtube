@@ -146,12 +146,15 @@
                             (cdr (ivy-youtube-tree-assoc 'videoId x))) *results*))
     (ivy-read "Youtube Search Results: "
               (reverse *results*)
-              :action (lambda (cand)
-                        (ivy-youtube-playvideo (ivy-youtube-build-url (cdr cand)))))))
+              :action '(1
+                        ("o" (lambda (cand)
+                               (ivy-youtube-playvideo (ivy-youtube-build-url (cdr cand)))) "Open Youtube")
+                        ("p" ivy-youtube-play-video-mpv "Play")
+                        ("d" ivy-youtube-download-video "Download")))))
 
 (defun ivy-youtube-search ()
   "Use ivy-read to select your search history."
-  (ivy-read "Search YouTube:"
+  (ivy-read "Search YouTube: "
             (ivy-youtube-history-list)
             :action (lambda (cand)
                       (ivy-youtube-append-history cand))))
@@ -162,6 +165,23 @@
          (history-words-with-candidate (add-to-list 'history-words candidate))
          (unique-words (delq nil (delete-dups history-words-with-candidate))))
     (write-region (mapconcat 'identity unique-words "\n") nil ivy-youtube-history-file nil)))
+
+(defun ivy-youtube-play-video-mpv (video)
+  "Play youtube video VIDEO in mpv player."
+  (interactive)
+  (let
+      (
+       (video-url (ivy-youtube-build-url (cdr video))))
+    (async-shell-command (format  "mpv '--ytdl-format=[height<=?720]' %s" video-url))))
+
+(defun ivy-youtube-download-video (video)
+  "Download youtube video VIDEO with youtube-dl."
+  (interactive)
+  (let*
+      (
+       (video-url (ivy-youtube-build-url  (cdr video)))
+       (download-command (format "cd %s && youtube-dl --format %s \"%s\"" "/Users/ailbe/youtube-videos" "mp4" video-url)))
+    (async-shell-command download-command)))
 
 (provide 'ivy-youtube)
 
