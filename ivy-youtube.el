@@ -171,8 +171,9 @@
   (interactive)
   (let
       (
-       (video-url (ivy-youtube-build-url (cdr video))))
-    (async-shell-command (format  "mpv '--ytdl-format=[height<=?720]' %s" video-url))))
+       (video-url (ivy-youtube-build-url (cdr video)))
+       (quality-arg "'--ytdl-format=[height<=?720]'"))
+    (start-process "elfeed-mpv" nil "mpv" quality-arg video-url)))
 
 (defun ivy-youtube-download-video (video)
   "Download youtube video VIDEO with youtube-dl."
