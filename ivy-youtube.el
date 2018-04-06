@@ -172,7 +172,7 @@
   (let
       (
        (video-url (ivy-youtube-build-url (cdr video)))
-       (quality-arg "'--ytdl-format=[height<=?720]'"))
+       (quality-arg "--ytdl-format=[height<=?720]"))
     (start-process "elfeed-mpv" nil "mpv" quality-arg video-url)))
 
 (defun ivy-youtube-download-video (video)
